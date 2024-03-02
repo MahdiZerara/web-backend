@@ -49,7 +49,7 @@ func (c *PostgresClient) Create(sqlStatement string, args ...any) error {
 }
 
 func (c *PostgresClient) Read(sqlStatement string, args ...any) (*sql.Rows, error) {
-	rows, queryErr := c.SQLDB.Query(sqlStatement)
+	rows, queryErr := c.SQLDB.Query(sqlStatement, args...)
 	if queryErr != nil {
 		return nil, queryErr
 	}

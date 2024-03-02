@@ -27,14 +27,30 @@ func (ctrl *StoreController) HandleRequest(w http.ResponseWriter, r *http.Reques
 
 	switch r.Method {
 	case "GET":
-		stores, retrieveStoresErr := ctrl.Repository.RetrieveStores()
+		// query := r.URL.Query()
+		// from := query.Get("from")
+		// to := query.Get("to")
+
+		stores, retrieveStoresErr := ctrl.Repository.RetrieveStores(5, 10)
 		if retrieveStoresErr != nil {
 			fmt.Errorf("error retrieving store %v", retrieveStoresErr)
+
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(`{
+				"success":false
+			}`))
+			return
 		}
 
-		fmt.Println("++++++++++++++++")
-		fmt.Println(stores)
-		fmt.Println("++++++++++++++++")
+		err := json.NewEncoder(w).Encode(stores)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(`{
+				"success":false
+			}`))
+			return
+		}
+
 	case "POST":
 		body, err := io.ReadAll(r.Body)
 		if err != nil {
