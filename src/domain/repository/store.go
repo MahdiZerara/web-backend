@@ -7,7 +7,7 @@ import (
 
 type StoreRepository interface {
 	InsertStore(*dto.Store) error
-	RetrieveStores(int, int) ([]dto.Store, error)
+	RetrieveStores() ([]dto.Store, error)
 }
 
 type storeRepository struct {
@@ -37,9 +37,9 @@ func (repo *storeRepository) InsertStore(store *dto.Store) error {
 	)
 }
 
-func (repo *storeRepository) RetrieveStores(limit, offset int) ([]dto.Store, error) {
-	sqlStatement := "SELECT * FROM Store LIMIT $1 OFFSET $2"
-	rows, readErr := repo.DBClient.Read(sqlStatement, limit, offset)
+func (repo *storeRepository) RetrieveStores() ([]dto.Store, error) {
+	sqlStatement := "SELECT * FROM Store"
+	rows, readErr := repo.DBClient.Read(sqlStatement)
 	if readErr != nil {
 		return nil, readErr
 	}

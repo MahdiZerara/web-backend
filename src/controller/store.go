@@ -27,11 +27,7 @@ func (ctrl *StoreController) HandleRequest(w http.ResponseWriter, r *http.Reques
 
 	switch r.Method {
 	case "GET":
-		// query := r.URL.Query()
-		// from := query.Get("from")
-		// to := query.Get("to")
-
-		stores, retrieveStoresErr := ctrl.Repository.RetrieveStores(5, 10)
+		stores, retrieveStoresErr := ctrl.Repository.RetrieveStores()
 		if retrieveStoresErr != nil {
 			fmt.Errorf("error retrieving store %v", retrieveStoresErr)
 
